@@ -3,40 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Portfolio | Admin Messages</title>
+    <title>Admin | Inbox</title>
     <style>
-        body { font-family: sans-serif; background: #0a0a0a; color: white; padding: 40px; }
-        .message-card { background: #161616; border: 1px solid #333; padding: 20px; border-radius: 8px; margin-bottom: 15px; }
-        .name { color: #3b82f6; font-weight: bold; font-size: 1.2rem; }
-        .email { color: #888; font-size: 0.9rem; margin-bottom: 10px; }
-        .text { line-height: 1.5; color: #ddd; }
-        .date { font-size: 0.7rem; color: #555; text-align: right; }
+        body { font-family: 'Segoe UI', sans-serif; background: #050505; color: white; padding: 20px; }
+        .card { background: #111; border: 1px solid #333; padding: 15px; margin-bottom: 10px; border-radius: 8px; }
+        .header { display: flex; justify-content: space-between; color: #007bff; font-weight: bold; }
+        .msg { margin-top: 10px; color: #ccc; }
+        .time { font-size: 0.8rem; color: #666; }
     </style>
 </head>
 <body>
-    <h1>Inbox: Contact Messages</h1>
-    <div id="message-container">Loading messages...</div>
+    <h2>Portfolio Inbox</h2>
+    <div id="list">Loading messages...</div>
 
     <script>
         fetch('/api/messages')
             .then(res => res.json())
             .then(data => {
-                const container = document.getElementById('message-container');
-                if (data.length === 0) {
-                    container.innerHTML = "<p>No messages yet.</p>";
+                const list = document.getElementById('list');
+                if(data.length === 0) {
+                    list.innerHTML = "No messages found.";
                     return;
                 }
-                container.innerHTML = data.map(m => `
-                    <div class="message-card">
-                        <div class="name">${m.name}</div>
-                        <div class="email">${m.email}</div>
-                        <div class="text">${m.message}</div>
-                        <div class="date">${new Date(m.created_at).toLocaleString()}</div>
+                list.innerHTML = data.map(m => `
+                    <div class="card">
+                        <div class="header">
+                            <span>${m.name}</span>
+                            <span class="time">${new Date(m.created_at).toLocaleString()}</span>
+                        </div>
+                        <div style="font-size:0.9rem; color:#888;">${m.email}</div>
+                        <div class="msg">${m.message}</div>
                     </div>
                 `).join('');
             })
             .catch(err => {
-                document.getElementById('message-container').innerText = "Error loading messages.";
+                document.getElementById('list').innerHTML = "Error loading data.";
             });
     </script>
 </body>
