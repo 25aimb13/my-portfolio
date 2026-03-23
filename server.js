@@ -62,6 +62,15 @@ app.post('/api/contact', (req, res) => {
             return res.status(500).json({ error: "Failed to save message" });
         }
         res.json({ success: true, message: "Message saved to TiDB!" });
+        // Step 85: Route to get all contact messages for the Admin page
+app.get('/api/messages', (req, res) => {
+    // We use 'pool' because that's what we set up to keep the connection alive
+    pool.query('SELECT * FROM contact_messages ORDER BY created_at DESC', (err, results) => {
+        if (err) {
+            console.error("Error fetching messages:", err);
+            return res.status(500).json({ error: err });
+        }
+        res.json(results);
     });
 });
 const PORT = process.env.PORT || 3000;
