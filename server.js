@@ -8,7 +8,7 @@ app.use(cors());
 app.use(express.json()); // <--- ADD THIS LINE HERE
 app.use(express.static('.'));
 
-// Replace your old 'const connection = ...' with this:
+// Replace your old connection code with this
 const pool = mysql.createPool({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
@@ -18,8 +18,15 @@ const pool = mysql.createPool({
     ssl: { minVersion: 'TLSv1.2', rejectUnauthorized: true },
     waitForConnections: true,
     connectionLimit: 10,
-    queueLimit: 0
+    enableKeepAlive: true, 
+    keepAliveInitialDelay: 10000
 });
+
+// Add a "Ping" to prevent the database from sleeping
+setInterval(() => {
+    pool.query('SELECT 1');
+    console.log('Keeping the connection alive...');
+}, 60000);
 
 // Use 'pool' instead of 'connection' for your routes
 app.get('/api/me', (req, res) => {
