@@ -5,10 +5,10 @@ const cors = require('cors');
 
 const app = express();
 app.use(cors());
-app.use(express.json()); // <--- ADD THIS LINE HERE
+app.use(express.json());
 app.use(express.static('.'));
 
-// Replace your old connection code with this
+// 1. Database Connection Pool
 const pool = mysql.createPool({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
@@ -18,24 +18,19 @@ const pool = mysql.createPool({
     ssl: { minVersion: 'TLSv1.2', rejectUnauthorized: true },
     waitForConnections: true,
     connectionLimit: 10,
-    enableKeepAlive: true, 
+    enableKeepAlive: true,
     keepAliveInitialDelay: 10000
 });
 
-// Add a "Ping" to prevent the database from sleeping
-setInterval(() => {
-    pool.query('SELECT 1');
-    console.log('Keeping the connection alive...');
-}, 60000);
-
-// Use 'pool' instead of 'connection' for your routes
+// 2. Route: Get My Info
 app.get('/api/me', (req, res) => {
     pool.query('SELECT * FROM my_info LIMIT 1', (err, results) => {
-        if (err) return res.status(500).send(err);
+        if (err) return res.status(500).json(err);
         res.json(results[0]);
     });
 });
 
+// 3. Route: Save Contact Message
 app.post('/api/contact', (req, res) => {
     const { name, email, message } = req.body;
     const sql = 'INSERT INTO contact_messages (name, email, message) VALUES (?, ?, ?)';
@@ -44,34 +39,17 @@ app.post('/api/contact', (req, res) => {
         res.json({ success: true });
     });
 });
-// Route to get your data
-app.get('/api/me', (req, res) => {
-    connection.query('SELECT * FROM my_info LIMIT 1', (err, results) => {
-        if (err) return res.status(500).send(err);
-        res.json(results[0]);
-    });
-});
-// Route to handle form submissions
-app.post('/api/contact', (req, res) => {
-    const { name, email, message } = req.body;
 
-    const sql = 'INSERT INTO contact_messages (name, email, message) VALUES (?, ?, ?)';
-    db.query(sql, [name, email, message], (err, result) => {
-        if (err) {
-            console.error("Database error:", err);
-            return res.status(500).json({ error: "Failed to save message" });
-        }
-        res.json({ success: true, message: "Message saved to TiDB!" });
-        // Step 85: Route to get all contact messages for the Admin page
+// 4. Route: Get All Messages (Step 85)
 app.get('/api/messages', (req, res) => {
-    // We use 'pool' because that's what we set up to keep the connection alive
     pool.query('SELECT * FROM contact_messages ORDER BY created_at DESC', (err, results) => {
-        if (err) {
-            console.error("Error fetching messages:", err);
-            return res.status(500).json({ error: err });
-        }
+        if (err) return res.status(500).json(err);
         res.json(results);
     });
 });
+
+// 5. Start Server
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+});
