@@ -80,37 +80,47 @@
 </footer>
 
 <script>
-    fetch('/api/me')
-        .then(response => response.json())
-        .then(data => {
-            // Fill in the text
-            document.getElementById('name').innerText = data.name;
-            document.getElementById('role').innerText = data.role;
-            document.getElementById('bio').innerText = data.bio;
-            document.getElementById('phone').innerText = data.phone;
-
-            // Make the links work
-            document.getElementById('phone-link').href = "tel:" + data.phone;
-            document.getElementById('email-link').href = "mailto:" + data.email;
-            document.getElementById('linkedin-link').href = data.linkedin;
-        })
-        .catch(err => console.error("Database connection error:", err));
-    document.getElementById('portfolio-form').addEventListener('submit', function(e) {
-    e.preventDefault(); // Stops the page from refreshing
+document.getElementById('portfolio-form').addEventListener('submit', function(e) {
+    e.preventDefault();
     
-    // Get values
-    const name = document.getElementById('contact-name').value;
-    const email = document.getElementById('contact-email').value;
-    const message = document.getElementById('contact-message').value;
-
-    console.log("Message from:", name, email, message);
-
-    // Show success message
+    // Select the status message element
     const status = document.getElementById('form-status');
-    status.style.display = 'block';
     
-    // Clear the form
-    this.reset();
+    const formData = {
+        name: document.getElementById('contact-name').value,
+        email: document.getElementById('contact-email').value,
+        message: document.getElementById('contact-message').value
+    };
+
+    fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+    })
+    .then(response => {
+        if (!response.ok) {
+            // If server returns an error (like 500), throw an error
+            throw new Error('Server error');
+        }
+        return response.json();
+    })
+    .then(data => {
+        if(data.success) {
+            status.style.display = 'block';
+            status.style.color = '#22c55e'; // Green for success
+            status.innerText = "Message truly saved in database!";
+            this.reset();
+        } else {
+            alert("Database rejected the message.");
+        }
+    })
+    .catch(err => {
+        // This runs if the message failed to go through
+        status.style.display = 'block';
+        status.style.color = '#ef4444'; // Red for error
+        status.innerText = "Error: Message not sent. Check Render logs.";
+        console.error("Submission error:", err);
+    });
 });
 </script>
 </body>
