@@ -1,0 +1,33 @@
+body {
+    background-color: #0f172a; /* Deep dark blue */
+    color: white;
+    font-family: 'Segoe UI', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.card {
+    background: #1e293b;
+    padding: 2rem;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    text-align: center;
+    max-width: 400px;
+    border: 1px solid #334155;
+}
+
+h1 { margin-bottom: 0.5rem; color: #38bdf8; }
+.role { font-weight: bold; color: #94a3b8; margin-bottom: 1rem; }
+.bio { line-height: 1.6; margin-bottom: 2rem; }
+
+.btn {
+    background: #38bdf8;
+    color: #0f172a;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+}

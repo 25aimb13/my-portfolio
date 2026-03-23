@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Portfolio</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="card">
+        <h1 id="name">Loading...</h1>
+        <p class="role" id="role"></p>
+        <p class="bio" id="bio"></p>
+        <a href="#" id="email" class="btn">Contact Me</a>
+    </div>
+
+    <script>
+        // This small script "asks" the server for your data
+        fetch('/api/me')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('name').innerText = data.name;
+                document.getElementById('role').innerText = data.role;
+                document.getElementById('bio').innerText = data.bio;
+                document.getElementById('email').href = "mailto:" + data.email;
+            });
+    </script>
+</body>
+</html>
