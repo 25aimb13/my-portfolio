@@ -24,6 +24,18 @@ app.get('/api/me', (req, res) => {
         res.json(results[0]);
     });
 });
+// Route to handle form submissions
+app.post('/api/contact', (req, res) => {
+    const { name, email, message } = req.body;
 
+    const sql = 'INSERT INTO contact_messages (name, email, message) VALUES (?, ?, ?)';
+    db.query(sql, [name, email, message], (err, result) => {
+        if (err) {
+            console.error("Database error:", err);
+            return res.status(500).json({ error: "Failed to save message" });
+        }
+        res.json({ success: true, message: "Message saved to TiDB!" });
+    });
+});
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
