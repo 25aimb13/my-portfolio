@@ -5,7 +5,8 @@ const cors = require('cors');
 
 const app = express();
 app.use(cors());
-app.use(express.static('.')); 
+app.use(express.json()); // <--- ADD THIS LINE HERE
+app.use(express.static('.'));
 
 // Connect to TiDB
 const connection = mysql.createConnection({
