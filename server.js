@@ -2,13 +2,14 @@ require('dotenv').config();
 const express = require('express');
 const mysql = require('mysql2');
 const cors = require('cors');
+const path = require('path'); // Added this for file paths
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(express.static('.'));
 
-// 1. Database Connection Pool
+// Database Connection
 const pool = mysql.createPool({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
@@ -22,7 +23,7 @@ const pool = mysql.createPool({
     keepAliveInitialDelay: 10000
 });
 
-// 2. Route: Get My Info
+// Route: Get Profile Info
 app.get('/api/me', (req, res) => {
     pool.query('SELECT * FROM my_info LIMIT 1', (err, results) => {
         if (err) return res.status(500).json(err);
@@ -30,7 +31,7 @@ app.get('/api/me', (req, res) => {
     });
 });
 
-// 3. Route: Save Contact Message
+// Route: Save Contact Message
 app.post('/api/contact', (req, res) => {
     const { name, email, message } = req.body;
     const sql = 'INSERT INTO contact_messages (name, email, message) VALUES (?, ?, ?)';
@@ -40,7 +41,7 @@ app.post('/api/contact', (req, res) => {
     });
 });
 
-// 4. Route: Get All Messages (Step 85)
+// Route: Get All Messages for Admin
 app.get('/api/messages', (req, res) => {
     pool.query('SELECT * FROM contact_messages ORDER BY created_at DESC', (err, results) => {
         if (err) return res.status(500).json(err);
@@ -48,7 +49,7 @@ app.get('/api/messages', (req, res) => {
     });
 });
 
-// 5. Start Server
+// Start Server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
