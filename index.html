@@ -43,25 +43,38 @@
     </section>
 
     <footer id="contact">
-        <h2>Let's Connect</h2>
-        <div class="contact-grid">
-            <div class="contact-item"><span>📞</span> <span id="phone"></span></div>
-            <a href="#" id="email" class="contact-item"><span>✉️</span> Email Me</a>
-            <a href="#" id="linkedin" target="_blank" class="contact-item"><span>🔗</span> LinkedIn</a>
-        </div>
-    </footer>
+    <h2>Let's Connect</h2>
+    <div class="contact-grid">
+        <a href="#" id="phone-link" class="contact-item">
+            <span class="icon">📞</span> <span id="phone">Loading...</span>
+        </a>
+        
+        <a href="#" id="email-link" class="contact-item">
+            <span class="icon">✉️</span> Email Me
+        </a>
+        
+        <a href="#" id="linkedin-link" target="_blank" class="contact-item">
+            <span class="icon">🔗</span> LinkedIn
+        </a>
+    </div>
+</footer>
 
-    <script>
-        fetch('/api/me')
-            .then(response => response.json())
-            .then(data => {
-                document.getElementById('name').innerText = data.name;
-                document.getElementById('role').innerText = data.role;
-                document.getElementById('bio').innerText = data.bio;
-                document.getElementById('phone').innerText = data.phone || "No Phone Added";
-                document.getElementById('email').href = "mailto:" + data.email;
-                document.getElementById('linkedin').href = data.linkedin || "#";
-            });
-    </script>
+<script>
+    fetch('/api/me')
+        .then(response => response.json())
+        .then(data => {
+            // Fill in the text
+            document.getElementById('name').innerText = data.name;
+            document.getElementById('role').innerText = data.role;
+            document.getElementById('bio').innerText = data.bio;
+            document.getElementById('phone').innerText = data.phone;
+
+            // Make the links work
+            document.getElementById('phone-link').href = "tel:" + data.phone;
+            document.getElementById('email-link').href = "mailto:" + data.email;
+            document.getElementById('linkedin-link').href = data.linkedin;
+        })
+        .catch(err => console.error("Database connection error:", err));
+</script>
 </body>
 </html>
