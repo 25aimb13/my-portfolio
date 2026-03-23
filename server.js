@@ -48,6 +48,14 @@ app.get('/api/messages', (req, res) => {
         res.json(results);
     });
 });
+// Route to delete a specific message
+app.delete('/api/messages/:id', (req, res) => {
+    const messageId = req.params.id;
+    pool.query('DELETE FROM contact_messages WHERE id = ?', [messageId], (err, result) => {
+        if (err) return res.status(500).json(err);
+        res.json({ success: true });
+    });
+});
 
 // Start Server
 const PORT = process.env.PORT || 3000;
