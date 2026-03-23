@@ -1,70 +1,79 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&display=swap');
+
+:root {
+    --bg: #050505;
+    --accent: #3b82f6;
+    --text: #ffffff;
+    --secondary: #94a3b8;
+}
+
+* { box-sizing: border-box; scroll-behavior: smooth; }
 
 body {
-    background: radial-gradient(circle at top right, #1e293b, #0f172a);
-    color: #f8fafc;
-    font-family: 'Inter', sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
+    background-color: var(--bg);
+    color: var(--text);
+    font-family: 'Space Grotesk', sans-serif;
     margin: 0;
-    overflow: hidden;
+    line-height: 1.6;
 }
 
-.card {
-    background: rgba(30, 41, 59, 0.7);
-    backdrop-filter: blur(12px); /* Glass effect */
-    -webkit-backdrop-filter: blur(12px);
-    padding: 3rem;
-    border-radius: 24px;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-    text-align: center;
-    max-width: 450px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    transition: transform 0.3s ease;
+/* Navbar */
+nav {
+    display: flex;
+    justify-content: space-between;
+    padding: 30px 10%;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 100;
+    background: rgba(5, 5, 5, 0.8);
+    backdrop-filter: blur(10px);
 }
 
-.card:hover {
-    transform: translateY(-10px);
+.logo { font-size: 1.5rem; font-weight: 700; color: var(--accent); }
+.nav-links a { color: var(--text); text-decoration: none; margin-left: 30px; font-weight: 500; }
+
+/* Hero Section */
+.hero {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 0 10%;
+    background: radial-gradient(circle at 80% 20%, #1e3a8a 0%, transparent 40%);
 }
 
-h1 { 
-    margin: 0; 
-    font-size: 2.5rem;
-    background: linear-gradient(to right, #38bdf8, #818cf8);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
-
-.role { 
-    font-weight: 600; 
-    color: #94a3b8; 
-    letter-spacing: 1px;
-    text-transform: uppercase;
+.badge {
+    background: rgba(59, 130, 246, 0.1);
+    color: var(--accent);
+    padding: 8px 16px;
+    border-radius: 50px;
     font-size: 0.8rem;
-    margin: 1rem 0; 
+    text-transform: uppercase;
+    letter-spacing: 2px;
 }
 
-.bio { 
-    line-height: 1.8; 
-    color: #cbd5e1;
-    margin-bottom: 2.5rem; 
-    font-weight: 300;
-}
+h1 { font-size: 5rem; margin: 20px 0 10px 0; line-height: 1; }
+.hero-role { font-size: 1.5rem; color: var(--secondary); margin-bottom: 20px; }
+.hero-bio { max-width: 600px; font-size: 1.1rem; color: #cbd5e1; margin-bottom: 40px; }
 
-.btn {
-    background: #38bdf8;
-    color: #0f172a;
-    padding: 14px 32px;
-    text-decoration: none;
-    border-radius: 12px;
-    font-weight: 700;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(56, 189, 248, 0.4);
-}
+/* Buttons */
+.hero-btns { display: flex; gap: 20px; }
+.btn-primary { background: var(--accent); color: white; padding: 15px 35px; text-decoration: none; border-radius: 8px; font-weight: 700; }
+.btn-secondary { border: 1px solid #333; color: white; padding: 15px 35px; text-decoration: none; border-radius: 8px; }
 
-.btn:hover {
-    background: #7dd3fc;
-    box-shadow: 0 6px 20px rgba(56, 189, 248, 0.6);
+/* Cards Section */
+.details { padding: 100px 10%; background: #0a0a0a; }
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+.card { background: #111; padding: 40px; border-radius: 20px; border: 1px solid #222; }
+.card h3 { color: var(--accent); margin-top: 0; }
+
+/* Footer */
+footer { padding: 100px 10%; text-align: center; border-top: 1px solid #222; }
+.contact-grid { display: flex; justify-content: center; gap: 30px; margin-top: 40px; }
+.contact-item { text-decoration: none; color: var(--text); font-size: 1.1rem; display: flex; align-items: center; gap: 10px; }
+
+@media (max-width: 768px) {
+    h1 { font-size: 3rem; }
+    .grid { grid-template-columns: 1fr; }
+    .contact-grid { flex-direction: column; }
 }
