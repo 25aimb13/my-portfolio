@@ -95,6 +95,23 @@
             document.getElementById('linkedin-link').href = data.linkedin;
         })
         .catch(err => console.error("Database connection error:", err));
+    document.getElementById('portfolio-form').addEventListener('submit', function(e) {
+    e.preventDefault(); // Stops the page from refreshing
+    
+    // Get values
+    const name = document.getElementById('contact-name').value;
+    const email = document.getElementById('contact-email').value;
+    const message = document.getElementById('contact-message').value;
+
+    console.log("Message from:", name, email, message);
+
+    // Show success message
+    const status = document.getElementById('form-status');
+    status.style.display = 'block';
+    
+    // Clear the form
+    this.reset();
+});
 </script>
 </body>
 </html>
