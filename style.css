@@ -137,3 +137,9 @@ footer { padding: 100px 10%; text-align: center; border-top: 1px solid #222; }
     border-color: var(--accent);
     box-shadow: 0 0 10px rgba(59, 130, 246, 0.2);
 }
+.edu-card:hover {
+    background: #1a1a1a;
+    border-left-color: #60a5fa; /* A slightly lighter blue */
+    transform: translateX(5px);
+    transition: 0.3s;
+}
