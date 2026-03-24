@@ -37,8 +37,12 @@ app.get('/api/education', (req, res) => {
 
 // 3. Get Skills (New)
 app.get('/api/skills', (req, res) => {
+    // Make sure the table name matches exactly what you created in TiDB
     pool.query('SELECT * FROM my_skills', (err, results) => {
-        if (err) return res.status(500).json(err);
+        if (err) {
+            console.error("Database error:", err); // This will show the error in Render logs
+            return res.status(500).json(err);
+        }
         res.json(results);
     });
 });
