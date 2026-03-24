@@ -2,14 +2,12 @@ require('dotenv').config();
 const express = require('express');
 const mysql = require('mysql2');
 const cors = require('cors');
-const path = require('path'); // Added this for file paths
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(express.static('.'));
 
-// Database Connection
 const pool = mysql.createPool({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
@@ -18,12 +16,10 @@ const pool = mysql.createPool({
     port: process.env.DB_PORT,
     ssl: { minVersion: 'TLSv1.2', rejectUnauthorized: true },
     waitForConnections: true,
-    connectionLimit: 10,
-    enableKeepAlive: true,
-    keepAliveInitialDelay: 10000
+    connectionLimit: 10
 });
 
-// Route: Get Profile Info
+// 1. Get Profile Info
 app.get('/api/me', (req, res) => {
     pool.query('SELECT * FROM my_info LIMIT 1', (err, results) => {
         if (err) return res.status(500).json(err);
@@ -31,34 +27,44 @@ app.get('/api/me', (req, res) => {
     });
 });
 
-// Route: Save Contact Message
+// 2. Get Education (New)
+app.get('/api/education', (req, res) => {
+    pool.query('SELECT * FROM my_education ORDER BY id DESC', (err, results) => {
+        if (err) return res.status(500).json(err);
+        res.json(results);
+    });
+});
+
+// 3. Get Skills (New)
+app.get('/api/skills', (req, res) => {
+    pool.query('SELECT * FROM my_skills', (err, results) => {
+        if (err) return res.status(500).json(err);
+        res.json(results);
+    });
+});
+
+// 4. Contact & Admin Routes
 app.post('/api/contact', (req, res) => {
     const { name, email, message } = req.body;
-    const sql = 'INSERT INTO contact_messages (name, email, message) VALUES (?, ?, ?)';
-    pool.query(sql, [name, email, message], (err, result) => {
+    pool.query('INSERT INTO contact_messages (name, email, message) VALUES (?, ?, ?)', [name, email, message], (err) => {
         if (err) return res.status(500).json({ success: false });
         res.json({ success: true });
     });
 });
 
-// Route: Get All Messages for Admin
 app.get('/api/messages', (req, res) => {
     pool.query('SELECT * FROM contact_messages ORDER BY created_at DESC', (err, results) => {
         if (err) return res.status(500).json(err);
         res.json(results);
     });
 });
-// Route to delete a specific message
+
 app.delete('/api/messages/:id', (req, res) => {
-    const messageId = req.params.id;
-    pool.query('DELETE FROM contact_messages WHERE id = ?', [messageId], (err, result) => {
+    pool.query('DELETE FROM contact_messages WHERE id = ?', [req.params.id], (err) => {
         if (err) return res.status(500).json(err);
         res.json({ success: true });
     });
 });
 
-// Start Server
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-});
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
