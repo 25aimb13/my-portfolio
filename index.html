@@ -126,16 +126,34 @@
     </div>
 </footer>
 <script>
-    // 1. FETCH PROFILE INFO
+  // 1. FETCH PROFILE INFO & SOCIAL LINKS
     fetch('/api/me')
         .then(response => response.json())
         .then(data => {
+            // Text Content
             if (document.getElementById('name')) document.getElementById('name').innerText = data.name;
             if (document.getElementById('role')) document.getElementById('role').innerText = data.role;
             if (document.getElementById('bio')) document.getElementById('bio').innerText = data.bio;
             
+            // Phone Number Logic
             const phoneSpan = document.getElementById('phone');
-            if (data.phone && phoneSpan) phoneSpan.innerText = data.phone;
+            const phoneLink = document.getElementById('phone-link');
+            if (data.phone) {
+                if (phoneSpan) phoneSpan.innerText = data.phone;
+                if (phoneLink) phoneLink.href = "tel:" + data.phone;
+            }
+
+            // Gmail/Email Logic
+            const emailLink = document.getElementById('email-link');
+            if (data.email && emailLink) {
+                emailLink.href = "mailto:" + data.email;
+            }
+
+            // LinkedIn Logic
+            const linkedinLink = document.getElementById('linkedin-link');
+            if (data.linkedin && linkedinLink) {
+                linkedinLink.href = data.linkedin;
+            }
         })
         .catch(err => console.error("Profile load error:", err));
 
