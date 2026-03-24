@@ -128,29 +128,49 @@
     </div>
 </footer>
 <script>
-     // --- UPDATE ONLY THIS SECTION ---
-fetch('/api/me')
-    .then(response => response.json())
-    .then(data => {
-        // 1. Text Content
-        document.getElementById('name').innerText = data.name;
-        document.getElementById('role').innerText = data.role;
-        document.getElementById('bio').innerText = data.bio;
-        
-        // 2. The Phone Button (MATCHES YOUR HTML)
-        const phoneSpan = document.getElementById('phone'); 
-        const phoneLink = document.getElementById('phone-link');
-        
-        if (data.phone) {
-            if (phoneSpan) phoneSpan.innerText = data.phone; // Replaces "Loading..."
-            if (phoneLink) phoneLink.href = "tel:" + data.phone; // Makes it dial
-        }
+    // 1. FETCH PROFILE INFO
+    fetch('/api/me')
+        .then(response => response.json())
+        .then(data => {
+            if (document.getElementById('name')) document.getElementById('name').innerText = data.name;
+            if (document.getElementById('role')) document.getElementById('role').innerText = data.role;
+            if (document.getElementById('bio')) document.getElementById('bio').innerText = data.bio;
+            
+            const phoneSpan = document.getElementById('phone');
+            if (data.phone && phoneSpan) phoneSpan.innerText = data.phone;
+        })
+        .catch(err => console.error("Profile load error:", err));
 
-        // 3. Social Links
-        if(document.getElementById('email-link')) document.getElementById('email-link').href = "mailto:" + data.email;
-        if(document.getElementById('linkedin-link')) document.getElementById('linkedin-link').href = data.linkedin;
-    })
-    .catch(err => console.error("Data load error:", err));
+    // 2. FETCH EDUCATION
+    fetch('/api/education')
+        .then(res => res.json())
+        .then(data => {
+            const eduList = document.getElementById('education-list');
+            if (eduList) {
+                eduList.innerHTML = data.map(edu => `
+                    <div class="edu-card">
+                        <h3>${edu.level}</h3>
+                        <p>${edu.school_name} (${edu.board})</p>
+                        <span style="color: #3b82f6; font-weight: bold;">${edu.year} | Score: ${edu.score}</span>
+                    </div>
+                `).join('');
+            }
+        });
+
+    // 3. FETCH SKILLS
+    fetch('/api/skills')
+        .then(res => res.json())
+        .then(data => {
+            const skillsList = document.getElementById('skills-list');
+            if (skillsList) {
+                skillsList.innerHTML = data.map(s => `
+                    <div class="skill-card">
+                        <span class="skill-name">${s.skill_name}</span>
+                        <span class="skill-level">${s.proficiency}</span>
+                    </div>
+                `).join('');
+            }
+        });
 
         // 2. CONTACT FORM LOGIC (Saves messages to TiDB)
         const portfolioForm = document.getElementById('portfolio-form');
