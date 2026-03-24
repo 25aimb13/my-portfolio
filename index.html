@@ -5,6 +5,49 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portfolio | Aryan Kumar Pollai</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        /* Skills Grid Layout */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 15px;
+        }
+
+        .skill-card {
+            background: #161616;
+            border: 1px solid #333;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            transition: 0.3s ease;
+        }
+
+        .skill-card:hover {
+            border-color: #3b82f6;
+            transform: translateY(-5px);
+        }
+
+        .skill-name {
+            display: block;
+            font-weight: bold;
+            color: #fff;
+        }
+
+        .skill-level {
+            font-size: 0.8rem;
+            color: #3b82f6;
+        }
+
+        /* Education Card Styling */
+        .edu-card {
+            background: #111;
+            border-left: 4px solid #3b82f6;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 0 10px 10px 0;
+            color: white;
+        }
+    </style>
 </head>
 <body>
     <nav>
