@@ -1,10 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&display=swap');
 
 :root {
-    --bg: #050505;
-    --accent: #3b82f6;
-    --text: #ffffff;
-    --secondary: #94a3b8;
+    --bg: #e91111;
+    --accent: #eef0f4;
+    --text: #a29a9a;
+    --secondary: #a2aab5;
 }
 
 * { box-sizing: border-box; scroll-behavior: smooth; }
